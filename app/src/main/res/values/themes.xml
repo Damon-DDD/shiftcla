@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 用平台主题，免去引用 com.google.android.material -->
+    <style name="Theme.Shiftcla" parent="@android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">#FFFBFE</item>
+    </style>
+</resources>

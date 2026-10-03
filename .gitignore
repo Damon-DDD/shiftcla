@@ -1,0 +1,35 @@
+# ---- Android / Gradle 构建产物 ----
+*.iml
+.gradle/
+.kotlin/
+build/
+app/build/
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+*.ap_
+*.dex
+
+# 打包好的安装包（本地留档用，不进仓库）
+/apk/
+
+# ---- 本机专属配置（含 SDK 绝对路径，绝不能提交）----
+local.properties
+.idea/
+*.hprof
+
+# ---- 开发期核对脚本与渲染结果（本地工具，非 App 代码）----
+/verify/
+
+# ---- macOS ----
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# ---- 签名密钥（万一以后放进项目里，别误提交）----
+*.jks
+*.keystore
+keystore.properties
