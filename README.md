@@ -4,6 +4,13 @@
 
 Jetpack Compose + Material 3 写的原生 Android 应用，手机 / 折叠屏 / 平板一套代码自适应。
 
+## 下载安装
+
+**[⬇️ 下载最新 APK](https://github.com/Damon-DDD/shiftcla/releases/latest)**（在 Releases 页面，需允许「安装未知来源应用」）
+
+- 要求 Android 7.0（API 24）及以上
+- 首次启动会要求填 API Key，**需要支持多模态（图文识别）的大模型**，否则课表截图解析不了。Key 只存本机，不会上传。
+
 <p align="center">
   <img src="docs/phone-courses.png" width="30%" alt="手机端课表" />
   <img src="docs/calendar.png" width="30%" alt="日历抽屉" />
