@@ -1,4 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+// ⚠️ 必须显式 import：Gradle Kotlin DSL 里裸写 `java.util.Properties` 会被解析成
+// `java` 扩展（JavaPluginExtension），不是包名，报 "Unresolved reference: util"。
+import java.util.Properties
 
 plugins {
     id("com.android.application")
@@ -8,6 +11,31 @@ plugins {
     // 仅用于把 @Preview 离屏渲染成 PNG（本地校验用，可随时删掉）
     id("com.android.compose.screenshot") version "0.0.1-alpha16"
 }
+
+// ===========================================================================
+// 签名配置
+// ---------------------------------------------------------------------------
+// 正式签名密钥**不在仓库里**（*.jks / keystore.properties 都已被 .gitignore 覆盖）。
+// 两条读取路径，优先级：环境变量（CI） > keystore.properties（本机）：
+//   · CI：GitHub Actions 把密钥 base64 解到临时文件，再用 KEYSTORE_FILE 等环境变量指过去
+//   · 本机：仓库根目录的 keystore.properties（已 gitignore），指向仓库外的密钥文件
+// 两者都没有 → 回退 debug keystore：保证 clone 下来的人不配密钥也能构建自测。
+// ===========================================================================
+val keystoreProps = Properties().apply {
+    val f = rootProject.file("keystore.properties")
+    if (f.exists()) f.inputStream().use { load(it) }
+}
+
+fun signingValue(envName: String, propName: String): String? =
+    System.getenv(envName)?.takeIf { it.isNotBlank() }
+        ?: keystoreProps.getProperty(propName)?.takeIf { it.isNotBlank() }
+
+val releaseStoreFile = signingValue("KEYSTORE_FILE", "storeFile")
+val releaseStorePassword = signingValue("KEYSTORE_PASSWORD", "storePassword")
+val releaseKeyAlias = signingValue("KEY_ALIAS", "keyAlias")
+val releaseKeyPassword = signingValue("KEY_PASSWORD", "keyPassword")
+val hasReleaseSigning =
+    listOf(releaseStoreFile, releaseStorePassword, releaseKeyAlias, releaseKeyPassword).all { it != null }
 
 android {
     namespace = "com.shiftcla.app"
@@ -22,21 +50,35 @@ android {
     }
 
     signingConfigs {
-        // 只为"自己装到手机上试"用：复用本地 debug.keystore 签 release，
-        // 好处是 release（关闭 Compose 的 debug 运行时开销）跑动画比 debug 顺。
-        // 要上架的话请换成你自己的正式 keystore。
+        // 回退用：本机 debug keystore。没配正式密钥时 release 也走它（仅供自测，
+        // 这种包不能用于公开分发 —— 换密钥后用户无法覆盖安装）。
         create("localTest") {
             storeFile = File(System.getProperty("user.home"), ".android/debug.keystore")
             storePassword = "android"
             keyAlias = "androiddebugkey"
             keyPassword = "android"
         }
+        if (hasReleaseSigning) {
+            create("release") {
+                storeFile = rootProject.file(releaseStoreFile!!)
+                storePassword = releaseStorePassword
+                keyAlias = releaseKeyAlias
+                keyPassword = releaseKeyPassword
+                // minSdk 24 已支持 v2/v3 签名，用默认即可
+                enableV1Signing = true
+                enableV2Signing = true
+            }
+        }
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
-            signingConfig = signingConfigs.getByName("localTest")
+            signingConfig = if (hasReleaseSigning) {
+                signingConfigs.getByName("release")
+            } else {
+                signingConfigs.getByName("localTest")
+            }
         }
     }
 
