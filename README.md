@@ -80,6 +80,46 @@ Key 只存在本机 SharedPreferences 里，不会上传到任何地方。
 > 默认接的是 DeepSeek 的 Chat Completions 接口（`app/src/main/java/com/shiftcla/app/data/DeepSeekEngine.kt` 里的
 > `ENDPOINT` / `MODEL`）。要换成别家兼容 OpenAI 格式的服务，改这两个常量即可。
 
+### 发布签名
+
+Release 包的签名配置按 **环境变量 → `keystore.properties` → 回退 debug** 三级查找，
+所以 clone 下来不配任何密钥也能构建（只是产物是 debug 签名的，仅供自测）。
+
+要用自己的正式密钥：
+
+```bash
+# 生成密钥（放在仓库外，避免误提交）
+keytool -genkeypair -v -keystore ~/AndroidKeys/shiftcla-release.jks \
+  -storetype PKCS12 -alias shiftcla -keyalg RSA -keysize 2048 -validity 10000
+
+# 在仓库根目录建 keystore.properties（已被 .gitignore 排除）
+cat > keystore.properties <<'EOF'
+storeFile=/Users/you/AndroidKeys/shiftcla-release.jks
+storePassword=你的口令
+keyAlias=shiftcla
+keyPassword=你的口令
+EOF
+```
+
+> ⚠️ **密钥与口令务必备份**。Android 要求升级包与已安装包的签名一致，
+> 密钥丢失后你将无法再发布可覆盖升级的新版本。
+
+## 持续集成
+
+`.github/workflows/android-ci.yml` 在 push / PR 时跑单元测试并构建 Release APK，
+产物作为工作流 artifact 上传；给仓库打 `v*` 标签时会自动把 APK 附加到对应 Release。
+
+CI 需要四个 Repository Secret：
+
+| Secret | 说明 |
+| --- | --- |
+| `KEYSTORE_BASE64` | 密钥文件的 base64（`base64 -i release.jks`） |
+| `KEYSTORE_PASSWORD` | 密钥库口令 |
+| `KEY_ALIAS` | 密钥别名 |
+| `KEY_PASSWORD` | 密钥口令 |
+
+配置后执行 `git tag v1.0 && git push origin v1.0` 即可自动发版。
+
 ## 代码结构
 
 ```

@@ -26,8 +26,16 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: 安装 Android SDK
-        uses: android-actions/setup-android@v3
+      # ⚠️ 不要用 android-actions/setup-android：
+      # 它内部会跑 `sdkmanager tools`，而新版 SDK 仓库已移除 `tools` 包，
+      # 会以 "Failed to find package 'tools'" 直接失败。
+      # ubuntu-latest runner 本就预装了 Android SDK 并设好 ANDROID_HOME/ANDROID_SDK_ROOT，
+      # 直接依赖即可；缺的 platform / build-tools 由 AGP 自动下载（许可证 runner 已接受）。
+      - name: 确认 Android SDK 就位
+        run: |
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT"
+          ls "$ANDROID_SDK_ROOT"/build-tools/ || true
 
       # 仓库里 wrapper 指向腾讯镜像（国内快），但 GitHub runner 在国外访问它反而慢，
       # 这里临时换成官方源。
@@ -73,8 +81,10 @@ jobs:
       - name: 校验签名并输出摘要
         run: |
           APK=app/build/outputs/apk/release/Shiftcla.apk
-          BUILD_TOOLS=$(ls -d "$ANDROID_SDK_ROOT"/build-tools/*/ | sort -V | tail -1)
+          SDK="${ANDROID_SDK_ROOT:-$ANDROID_HOME}"
+          BUILD_TOOLS=$(ls -d "$SDK"/build-tools/*/ | sort -V | tail -1)
           echo "== 签名证书 =="
+          echo "（应为 CN=Shiftcla，而不是 CN=Android Debug —— 后者说明密钥没生效）"
           "${BUILD_TOOLS}apksigner" verify --print-certs "$APK"
           echo "== 文件摘要 =="
           sha256sum "$APK"
