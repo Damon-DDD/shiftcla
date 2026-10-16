@@ -59,6 +59,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import com.shiftcla.app.R
 import com.shiftcla.app.data.ApiKeyStore
 import com.shiftcla.app.data.ShiftclaDate
 import com.shiftcla.app.data.TermPhase
@@ -78,6 +79,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -463,7 +465,7 @@ private fun AiNoteRow(note: String) {
             contentAlignment = Alignment.CenterStart,
         ) {
             Text(
-                text = "AI 备注：$note",
+                text = stringResource(R.string.detail_ai_note, note),
                 style = MaterialTheme.typography.bodyMedium.copy(
                     fontSize = t.AiTextSize,
                     lineHeight = t.AiTextLineHeight,
@@ -620,12 +622,11 @@ fun ShiftclaApp(
     selectedDate: java.time.LocalDate = java.time.LocalDate.now(),
     onSelectDate: (java.time.LocalDate) -> Unit = {},
     onBackToToday: () -> Unit = {},
-    /** 空态文案。由 [emptyCopyFor] 按学期阶段算出来 */
-    emptyCopy: EmptyCopy = EmptyCopy(
-        title = "还没有课表",
-        body = "点左上角菜单 → 导入教务数据\n把教务文本丢给 AI，它会帮你排好",
-        kind = EmptyKind.Sparkle,
-    ),
+    /**
+     * 空态文案。传 null 时按 [EmptyCase.NoSchedule] 取当前语言的资源
+     * （正式流程里由路由层按学期阶段算好再传进来）。
+     */
+    emptyCopy: EmptyCopy? = null,
     /**
      * 是否显示屏幕中央的空态提示。
      *
@@ -797,7 +798,8 @@ fun ShiftclaApp(
         //   中间的居中大提示只给「全局性」空态，否则滑动切日时会残留。）
         if (showCenteredEmpty && data.courses.isEmpty()) {
             EmptyCoursesHint(
-                copy = emptyCopy,
+                // 没显式给就用「还没有课表」那套资源文案
+                copy = emptyCopy ?: emptyCopyOf(EmptyCase.NoSchedule),
                 modifier = Modifier
                     .align(Alignment.Center)
                     .padding(horizontal = 40.dp),
@@ -911,7 +913,7 @@ private fun BoxScope.ParsingOverlay(visible: Boolean) {
             )
             Spacer(Modifier.height(16.dp))
             Text(
-                text = "AI 正在解析…",
+                text = stringResource(R.string.detail_parsing),
                 style = MaterialTheme.typography.bodyMedium,
                 color = ShiftclaTokens.TextSecondary,
             )
@@ -958,6 +960,48 @@ internal fun EmptyCoursesHint(
     }
 }
 
+/**
+ * 把 [EmptyCase] 翻译成当前语言的 [EmptyCopy]。
+ *
+ * 放在 Composable 层（而不是 EmptyState.kt 的纯逻辑里）是有意的：
+ * 那边要保持零 Compose 依赖才能进 JVM 单测。
+ *
+ * @param termNote 学期结束时 AI 写的那句；为空则用 [R.string.empty_after_term_fallback]
+ */
+@Composable
+internal fun emptyCopyOf(case: EmptyCase, termNote: String? = null): EmptyCopy = when (case) {
+    EmptyCase.BeforeTerm -> EmptyCopy(
+        title = stringResource(R.string.empty_before_term_title),
+        body = stringResource(R.string.empty_before_term_body),
+        kind = EmptyKind.Calendar,
+    )
+
+    EmptyCase.AfterTerm -> EmptyCopy(
+        title = stringResource(R.string.empty_after_term_title),
+        body = termNote?.takeIf { it.isNotBlank() }
+            ?: stringResource(R.string.empty_after_term_fallback),
+        kind = EmptyKind.Sparkle,
+    )
+
+    EmptyCase.NoClassToday -> EmptyCopy(
+        title = stringResource(R.string.empty_no_class_today_title),
+        body = stringResource(R.string.empty_no_class_today_body),
+        kind = EmptyKind.Sparkle,
+    )
+
+    EmptyCase.NoClassThatDay -> EmptyCopy(
+        title = stringResource(R.string.empty_no_class_day_title),
+        body = stringResource(R.string.empty_no_class_day_body),
+        kind = EmptyKind.Sparkle,
+    )
+
+    EmptyCase.NoSchedule -> EmptyCopy(
+        title = stringResource(R.string.empty_no_schedule_title),
+        body = stringResource(R.string.empty_no_schedule_body),
+        kind = EmptyKind.Sparkle,
+    )
+}
+
 /* ==========================================================================
  * 路由层：把 ViewModel 和上面这些纯展示组件粘起来
  * ========================================================================== */
@@ -990,10 +1034,14 @@ fun ShiftclaRoute(
     val termNote by viewModel.termNote.collectAsState()
     val selectedDate by viewModel.selectedDate.collectAsState()
 
+    // 界面语言：日期文案（"10月24日 · 今天" / "Oct 24 · Today"）跟着它走
+    val uiLocale = LocalConfiguration.current.locales[0]
     // 真实今天（学期阶段判断 / AI 提示词锚点）。remember 住，不在每次重组里反复取时钟。
-    val today = remember { ShiftclaDate.snapshot() }
+    val today = remember(uiLocale) { ShiftclaDate.snapshot(locale = uiLocale) }
     // **选中日期**的快照：Header 日期 / 周次胶囊 / 空态分支都跟它走
-    val selectedSnap = remember(selectedDate) { ShiftclaDate.snapshot(selectedDate) }
+    val selectedSnap = remember(selectedDate, uiLocale) {
+        ShiftclaDate.snapshot(selectedDate, uiLocale)
+    }
     val isToday = selectedDate == java.time.LocalDate.now()
 
     var showImportSheet by remember { mutableStateOf(false) }
@@ -1037,7 +1085,7 @@ fun ShiftclaRoute(
             // courses 已经在 VM 里按「选中日期 + 教学周」过滤排序过
             courses = courses,
             // 日期文案跟着选中日期走：今天 / 昨天 / 明天 / 周X
-            currentDate = ShiftclaDate.currentDateLabel(selectedDate),
+            currentDate = ShiftclaDate.currentDateLabel(selectedDate, locale = uiLocale),
             dateLabel = selectedSnap.dateLabel,
             weekdayLabel = selectedSnap.weekdayLabel,
             weekLabel = selectedSnap.weekLabel,
@@ -1067,13 +1115,15 @@ fun ShiftclaRoute(
         selectedDate = selectedDate,
         onSelectDate = viewModel::selectDate,
         onBackToToday = viewModel::backToToday,
-        // 空态分支全在 emptyCopyFor 里（有单测钉着）。
+        // 空态分支全在 emptyCaseFor 里（有单测钉着）；文案按当前语言从资源取。
         // isToday：滑到别的日子后，「今天没有课」要变成「这天没有课」。
-        emptyCopy = emptyCopyFor(
-            phase = selectedSnap.phase,
-            hasAnyCourses = hasAnyCourses,
+        emptyCopy = emptyCopyOf(
+            case = emptyCaseFor(
+                phase = selectedSnap.phase,
+                hasAnyCourses = hasAnyCourses,
+                isToday = isToday,
+            ),
             termNote = termNote,
-            isToday = isToday,
         ),
         // 居中空态只给「学期外」或「还没课表」；「这天没课」不显示居中提示
         showCenteredEmpty = !hasAnyCourses || selectedSnap.phase != TermPhase.InTerm,

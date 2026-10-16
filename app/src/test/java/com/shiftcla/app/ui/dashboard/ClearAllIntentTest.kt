@@ -55,4 +55,35 @@ class ClearAllIntentTest {
         assertFalse(isClearAllIntent(""))
         assertFalse(isClearAllIntent("   "))
     }
+
+    // ------------------------------------------------------------------ 英文（国际化后新增）
+
+    @Test
+    fun `英文的清空指令也能命中`() {
+        assertTrue(isClearAllIntent("clear all courses"))
+        assertTrue(isClearAllIntent("Clear all my classes"))
+        assertTrue(isClearAllIntent("delete all classes"))
+        assertTrue(isClearAllIntent("remove everything"))
+        assertTrue(isClearAllIntent("reset the whole schedule"))
+        assertTrue(isClearAllIntent("wipe my timetable"))
+    }
+
+    @Test
+    fun `英文提问不该误触发`() {
+        assertFalse(isClearAllIntent("How do I clear all courses?"))
+        assertFalse(isClearAllIntent("Why are my classes gone"))
+    }
+
+    @Test
+    fun `英文单门课删除不是清空全部`() {
+        assertFalse(isClearAllIntent("delete Calculus"))
+        assertFalse(isClearAllIntent("remove Linear Algebra from Monday"))
+    }
+
+    @Test
+    fun `英文课表文本不误伤`() {
+        // 含 all / class 字样的正常课表内容，不能当成清空指令
+        assertFalse(isClearAllIntent("Mon 8:00 Calculus Room A101 Prof. Wang"))
+        assertFalse(isClearAllIntent("Small Group Seminar, Wed 14:00"))
+    }
 }

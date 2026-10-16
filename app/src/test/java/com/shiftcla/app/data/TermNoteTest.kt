@@ -16,7 +16,10 @@ class TermNoteTest {
         clear(); set(y, m - 1, d)
     }
 
-    private fun promptOnHoliday() = TermNote.prompt(ShiftclaDate.snapshot(cal(2027, 2, 4)))
+    private fun promptOnHoliday() = TermNote.prompt(
+        ShiftclaDate.snapshot(cal(2027, 2, 4), java.util.Locale.CHINESE),
+        java.util.Locale.CHINESE,
+    )
 
     @Test
     fun `提示词里带上今天日期、学期跨度、结束日期`() {
@@ -44,16 +47,26 @@ class TermNoteTest {
     }
 
     @Test
-    fun `兜底文案也得覆盖 放松 和 提醒 两层意思`() {
-        assertTrue(TermNote.FALLBACK.contains("松"), "兜底文案少了放松：${TermNote.FALLBACK}")
-        assertTrue(TermNote.FALLBACK.contains("课表"), "兜底文案少了提醒更新数据：${TermNote.FALLBACK}")
+    fun `非中文界面要明确要求 AI 用英文写`() {
+        // 兜底文案已经移进 strings.xml，这里改为钉住"语言指令"这层新逻辑：
+        // 英文用户不该收到一句中文的 AI 文案。
+        val en = TermNote.prompt(
+            ShiftclaDate.snapshot(cal(2027, 2, 4), java.util.Locale.ENGLISH),
+            java.util.Locale.ENGLISH,
+        )
+        assertTrue(en.contains("English"), "英文界面要显式要求英文输出：$en")
+
+        // 中文界面则不该出现这句多余指令
+        assertTrue(!promptOnHoliday().contains("English"), "中文界面别加英文指令")
     }
 
     @Test
     fun `学期结束信息缺失时提示词也能拼完整`() {
         // 防御：万一以后 TERM_START 被清空，termEndLabel 会是 null，不能让提示词半句话断掉
-        val broken = ShiftclaDate.snapshot(cal(2027, 2, 4)).copy(termEndLabel = null)
-        val p = TermNote.prompt(broken)
+        val broken = ShiftclaDate
+            .snapshot(cal(2027, 2, 4), java.util.Locale.CHINESE)
+            .copy(termEndLabel = null)
+        val p = TermNote.prompt(broken, java.util.Locale.CHINESE)
         assertTrue(p.contains("已经结束了"), "termEndLabel 缺失时也要有完整句子：$p")
         assertTrue(!p.contains("null"), "别把 null 拼进提示词：$p")
     }

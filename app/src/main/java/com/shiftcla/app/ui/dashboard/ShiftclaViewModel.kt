@@ -2,11 +2,14 @@
 
 package com.shiftcla.app.ui.dashboard
 
+import android.app.Application
+import androidx.annotation.StringRes
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.shiftcla.app.R
 import com.shiftcla.app.data.ApiKeyStore
 import com.shiftcla.app.data.ChatBubble
 import com.shiftcla.app.data.ChatTurn
@@ -42,7 +45,17 @@ import java.time.LocalDate
  *   courses = 解析结果 →  isParsing = false  →  瀑布流自动错落进场
  * ```
  */
-class ShiftclaViewModel : ViewModel() {
+class ShiftclaViewModel(application: Application) : AndroidViewModel(application) {
+
+    /**
+     * 取当前语言的资源文案。
+     *
+     * 为什么用 [AndroidViewModel]：错误提示、对话气泡这些文案必须跟着系统语言走，
+     * 而它们是在 ViewModel 里拼出来的 —— ViewModel 本身没有 Context，
+     * AndroidViewModel 提供的 Application 级 Context 正好够用（生命周期同进程，不会泄漏）。
+     */
+    private fun str(@StringRes id: Int, vararg args: Any): String =
+        getApplication<Application>().getString(id, *args)
 
     /**
      * AI 解析结果（含课程数组 + 全局总评）。默认空对象。
@@ -112,7 +125,9 @@ class ShiftclaViewModel : ViewModel() {
 
     /**
      * 学期结束后界面上那句 AI 文案。
-     * null = 还没拿到（UI 自己用 [TermNote.FALLBACK] 顶上，不会出现空白）。
+     *
+     * null = 还没有 AI 写的版本。UI 会退回 `R.string.empty_after_term_fallback`
+     * （不能在这里塞写死的中文兜底，否则英文用户会看到中文）。
      */
     private val _termNote = MutableStateFlow<String?>(null)
     val termNote: StateFlow<String?> = _termNote.asStateFlow()
@@ -139,7 +154,8 @@ class ShiftclaViewModel : ViewModel() {
         }
         if (termNoteLoading) return
         if (!ApiKeyStore.isConfigured) {
-            _termNote.value = TermNote.FALLBACK
+            // 没配 Key：保持 null，由 UI 用当前语言的兜底文案顶上
+            _termNote.value = null
             return
         }
 
@@ -148,10 +164,10 @@ class ShiftclaViewModel : ViewModel() {
             try {
                 val written = DeepSeekEngine.writeTermNote(TermNote.prompt(snapshot))
                     ?.takeIf { it.isNotBlank() }
-                // 只有 AI 真写出东西才落盘：兜底文案不缓存，
+                // 只有 AI 真写出东西才落盘：兜底不缓存，
                 // 这样用户之后配了 API Key 还能再试一次。
                 written?.let { TermNote.save(snapshot.termKey, it) }
-                _termNote.value = written ?: TermNote.FALLBACK
+                _termNote.value = written
             } finally {
                 termNoteLoading = false
             }
@@ -172,12 +188,12 @@ class ShiftclaViewModel : ViewModel() {
             return
         }
         if (rawText.isBlank() && imageBase64s.isEmpty()) {
-            _errorMessage.value = "内容为空，先粘贴点东西或选张图吧"
+            _errorMessage.value = str(R.string.msg_empty_input)
             return
         }
         // 没配 Key 就别发请求了，直接提示
         if (!ApiKeyStore.isConfigured) {
-            _errorMessage.value = "请先配置 API Key"
+            _errorMessage.value = str(R.string.msg_need_api_key)
             return
         }
         if (_isParsing.value) return   // 防连点：正在解析就忽略后续点击
@@ -201,13 +217,13 @@ class ShiftclaViewModel : ViewModel() {
                     imageBase64s = imageBase64s,
                 )
                 if (parsed == null) {
-                    _errorMessage.value = "解析失败：网络异常或 AI 没返回合法 JSON"
+                    _errorMessage.value = str(R.string.msg_parse_failed)
                     _bubbles.value = _bubbles.value +
-                            ChatBubble(fromUser = false, text = "没解析成功，换个说法再试试？")
+                            ChatBubble(fromUser = false, text = str(R.string.msg_parse_failed_reply))
                 } else if (parsed.courses.isEmpty()) {
-                    _errorMessage.value = "AI 没从这段内容里找到任何课程"
+                    _errorMessage.value = str(R.string.msg_no_courses)
                     _bubbles.value = _bubbles.value +
-                            ChatBubble(fromUser = false, text = "这段内容里我没找到课程")
+                            ChatBubble(fromUser = false, text = str(R.string.msg_no_courses_reply))
                 } else {
                     _schedule.value = parsed
                     // 持久化课表：后台划掉 App 再打开也不丢
@@ -229,7 +245,7 @@ class ShiftclaViewModel : ViewModel() {
                 }
             } catch (t: Throwable) {
                 // parseSchedule 内部已经吞了异常，这里兜底防漏
-                _errorMessage.value = t.message ?: "未知错误"
+                _errorMessage.value = t.message ?: str(R.string.msg_unknown_error)
             } finally {
                 _isParsing.value = false
             }
@@ -265,8 +281,7 @@ class ShiftclaViewModel : ViewModel() {
 
     /** AI 气泡的人话文案：说清"改了几门"，并把总评带上。 */
     private fun summarize(response: ScheduleResponse): String {
-        val count = response.courses.size
-        val head = "已更新 $count 门课"
+        val head = str(R.string.msg_updated_count, response.courses.size)
         return response.globalSummary?.let { "$head · $it" } ?: head
     }
 }
@@ -283,12 +298,35 @@ class ShiftclaViewModel : ViewModel() {
 internal fun isClearAllIntent(text: String): Boolean {
     val t = text.trim()
     if (t.isEmpty()) return false
-    // 排除纯提问 / 否定表达，避免「怎么清空课程」这类也误触发
-    if (Regex("怎么|如何|为什么|？|\\?|吗$").containsMatchIn(t)) return false
-    // 必须同时命中「动作」+「范围」：清/删/移除/重置 × 全部/所有/整个/课表/课程
-    val action = Regex("清|删|移除|重置|归零|不要").containsMatchIn(t)
-    val scope = Regex("全部|所有|整个|整份|课表|课程|课").containsMatchIn(t)
+    // 排除纯提问 / 否定表达，避免「怎么清空课程」「How do I clear all?」这类也误触发
+    if (QUESTION_REGEX.containsMatchIn(t)) return false
+    // 必须同时命中「动作」+「范围」+「整体」，中英文各一套关键词（用户说什么语言都认）
+    val action = ACTION_REGEX.containsMatchIn(t)
+    val scope = SCOPE_REGEX.containsMatchIn(t)
     // 纯「删掉 X 课」是单门删除，不是清空全部 —— 只有明确指向"所有/全部"才算
-    val whole = Regex("全部|所有|整个|整份|清空|清零|不要了").containsMatchIn(t)
+    val whole = WHOLE_REGEX.containsMatchIn(t)
     return action && scope && whole
 }
+
+// 中文关键词 + 英文关键词。用 IGNORE_CASE 让英文大小写不敏感。
+private val QUESTION_REGEX = Regex("怎么|如何|为什么|？|\\?|吗$|^how\\b|^what\\b|^why\\b", RegexOption.IGNORE_CASE)
+private val ACTION_REGEX = Regex("清|删|移除|重置|归零|不要|clear|delete|remove|reset|wipe|drop", RegexOption.IGNORE_CASE)
+
+/** 动作作用的对象。可以是"整体"（所有/全部），也可以是一个容器（课表/课程/schedule）。 */
+private val SCOPE_REGEX = Regex(
+    "全部|所有|整个|整份|课表|课程|课|\\ball\\b|every|whole|entire|schedule|timetable|course|class",
+    RegexOption.IGNORE_CASE,
+)
+
+/**
+ * 必须表达"整体"，不能只是单门课。
+ *
+ * 注意这里**也把课表/schedule/timetable 算作整体** —— 「wipe my timetable」
+ * 「删掉课表」语义上就是清空全部，不该因为没写 all/全部 就漏判。
+ * 而单门课（delete Calculus / 删掉高数）既命中不了这里，也命中不了 SCOPE。
+ */
+private val WHOLE_REGEX = Regex(
+    "全部|所有|整个|整份|清空|清零|不要了|课表" +
+            "|\\ball\\b|every|everything|entire|whole|schedule|timetable",
+    RegexOption.IGNORE_CASE,
+)

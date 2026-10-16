@@ -2,6 +2,7 @@
 
 package com.shiftcla.app.ui.dashboard
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -38,10 +39,12 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.material3.DrawerState
+import com.shiftcla.app.R
 
 /* ============================================================================
  *  ShiftclaDrawer · 悬浮式侧边导航抽屉
@@ -97,12 +100,12 @@ object ShiftclaDrawerTokens {
     val SponsorShape: Shape = RoundedCornerShape(percent = 50)
 }
 
-/** 抽屉里的一项。 */
-private data class DrawerEntry(val label: String, val icon: ImageVector)
+/** 抽屉里的一项。[labelRes] 存字符串资源 id —— 顶层常量拿不到 stringResource。 */
+private data class DrawerEntry(@StringRes val labelRes: Int, val icon: ImageVector)
 
 private val DRAWER_ENTRIES = listOf(
-    DrawerEntry("导入教务数据", Icons.Outlined.FileDownload),
-    DrawerEntry("API 配置", Icons.Outlined.Settings),
+    DrawerEntry(R.string.drawer_import, Icons.Outlined.FileDownload),
+    DrawerEntry(R.string.drawer_api_config, Icons.Outlined.Settings),
 )
 
 /**
@@ -170,7 +173,7 @@ fun ShiftclaDrawerPanel(
                 NavigationDrawerItem(
                     label = {
                         Text(
-                            text = entry.label,
+                            text = stringResource(entry.labelRes),
                             style = MaterialTheme.typography.bodyMedium.copy(fontSize = 14.sp),
                             maxLines = 1,
                         )
@@ -211,7 +214,7 @@ fun ShiftclaDrawerPanel(
                 contentPadding = PaddingValues(horizontal = 18.dp, vertical = 0.dp),
             ) {
                 Text(
-                    text = "赞助",
+                    text = stringResource(R.string.drawer_sponsor),
                     style = MaterialTheme.typography.labelLarge.copy(fontSize = t.SponsorTextSize),
                     maxLines = 1,
                 )

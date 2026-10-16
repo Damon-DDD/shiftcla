@@ -55,6 +55,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -63,6 +64,7 @@ import androidx.compose.ui.unit.sp
 import java.io.ByteArrayOutputStream
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.layout.widthIn
+import com.shiftcla.app.R
 import com.shiftcla.app.data.ChatBubble
 
 /* ============================================================================
@@ -96,8 +98,7 @@ object ImportSheetTokens {
     val ThumbSize = 64.dp
 }
 
-/** 输入框占位符。用户说的话就是提示词，所以写得很宽松。 */
-private const val HINT = "粘贴教务文本、作息时间，或直接用大白话告诉 AI..."
+/** 输入框占位符在 strings.xml 里（import_hint）。用户说的话就是提示词，所以写得很宽松。 */
 
 /** 一次最多选几张图。系统选择器本身的上限是 MediaStore 给的值（通常 100），这里收得更紧。 */
 private const val MAX_IMAGES = 9
@@ -212,7 +213,7 @@ fun ImportSheetContent(
                     .heightIn(min = t.InputMinHeight),
                 placeholder = {
                     Text(
-                        text = HINT,
+                        text = stringResource(R.string.import_hint),
                         style = MaterialTheme.typography.bodyMedium,
                         color = ShiftclaTokens.TextTertiary,
                     )
@@ -244,7 +245,7 @@ fun ImportSheetContent(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.AddPhotoAlternate,
-                        contentDescription = "从相册选择图片（可多选）",
+                        contentDescription = stringResource(R.string.import_pick_images),
                         tint = when {
                             pickedUris.isEmpty() -> ShiftclaTokens.TextTertiary
                             pickedUris.size >= MAX_IMAGES -> ShiftclaTokens.TextTertiary.copy(alpha = 0.4f)
@@ -294,7 +295,10 @@ fun ImportSheetContent(
             ) {
                 Text(
                     // 首轮是"解析"，之后就是"改" —— 文案跟着语义走
-                    text = if (bubbles.isEmpty()) "交由 AI 解析 ✨" else "发送修改 ✨",
+                    text = stringResource(
+                        if (bubbles.isEmpty()) R.string.import_submit_parse
+                        else R.string.import_submit_modify
+                    ),
                     style = MaterialTheme.typography.labelLarge.copy(fontSize = 14.sp),
                     fontWeight = FontWeight.Medium,
                 )
@@ -378,7 +382,7 @@ private fun PickedImageThumb(uri: Uri, onClear: () -> Unit, size: Dp) {
             if (bitmap != null) {
                 Image(
                     bitmap = bitmap.asImageBitmap(),
-                    contentDescription = "已选图片",
+                    contentDescription = stringResource(R.string.import_picked_image),
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.size(size).clip(RoundedCornerShape(12.dp)),
                 )
@@ -400,7 +404,7 @@ private fun PickedImageThumb(uri: Uri, onClear: () -> Unit, size: Dp) {
         ) {
             Icon(
                 imageVector = Icons.Filled.Close,
-                contentDescription = "取消选择图片",
+                contentDescription = stringResource(R.string.import_remove_image),
                 tint = Color.White,
                 modifier = Modifier.size(12.dp),
             )

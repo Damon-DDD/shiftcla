@@ -34,7 +34,7 @@ import com.android.tools.screenshot.PreviewTest
 class ShiftclaDashboardScreenshotTest {
 
     @PreviewTest
-    @Preview(name = "phone-402", widthDp = 402, heightDp = 874, showBackground = true)
+    @Preview(name = "phone-402", widthDp = 402, heightDp = 874, showBackground = true, locale = "zh")
     @Composable
     fun phoneTwoColumn() {
         MaterialTheme(typography = ShiftclaTypography) {
@@ -43,7 +43,7 @@ class ShiftclaDashboardScreenshotTest {
     }
 
     @PreviewTest
-    @Preview(name = "tablet-1280", widthDp = 1280, heightDp = 800, showBackground = true)
+    @Preview(name = "tablet-1280", widthDp = 1280, heightDp = 800, showBackground = true, locale = "zh")
     @Composable
     fun tabletFourColumn() {
         MaterialTheme(typography = ShiftclaTypography) {
@@ -53,7 +53,7 @@ class ShiftclaDashboardScreenshotTest {
 
     /** 折叠屏展开态实测宽度：以前这里会被硬拆两半，卡片只剩 140dp。 */
     @PreviewTest
-    @Preview(name = "foldable-740", widthDp = 740, heightDp = 1180, showBackground = true)
+    @Preview(name = "foldable-740", widthDp = 740, heightDp = 1180, showBackground = true, locale = "zh")
     @Composable
     fun foldableUnfolded() {
         MaterialTheme(typography = ShiftclaTypography) {
@@ -63,7 +63,7 @@ class ShiftclaDashboardScreenshotTest {
 
     /** 分屏 / 桌面小窗：列数应当自动降下来，而不是把卡片压窄。 */
     @PreviewTest
-    @Preview(name = "window-560", widthDp = 560, heightDp = 900, showBackground = true)
+    @Preview(name = "window-560", widthDp = 560, heightDp = 900, showBackground = true, locale = "zh")
     @Composable
     fun splitWindow() {
         MaterialTheme(typography = ShiftclaTypography) {
@@ -72,7 +72,7 @@ class ShiftclaDashboardScreenshotTest {
     }
 
     @PreviewTest
-    @Preview(name = "narrow-320", widthDp = 320, heightDp = 800, showBackground = true)
+    @Preview(name = "narrow-320", widthDp = 320, heightDp = 800, showBackground = true, locale = "zh")
     @Composable
     fun narrowWindow() {
         MaterialTheme(typography = ShiftclaTypography) {
@@ -85,7 +85,7 @@ class ShiftclaDashboardScreenshotTest {
 class ShiftclaDetailScreenshotTest {
 
     @PreviewTest
-    @Preview(name = "detail-phone-402", widthDp = 402, heightDp = 874, showBackground = true)
+    @Preview(name = "detail-phone-402", widthDp = 402, heightDp = 874, showBackground = true, locale = "zh")
     @Composable
     fun detailOnPhone() {
         MaterialTheme(typography = ShiftclaTypography) {
@@ -94,7 +94,7 @@ class ShiftclaDetailScreenshotTest {
     }
 
     @PreviewTest
-    @Preview(name = "detail-foldable-740", widthDp = 740, heightDp = 1000, showBackground = true)
+    @Preview(name = "detail-foldable-740", widthDp = 740, heightDp = 1000, showBackground = true, locale = "zh")
     @Composable
     fun detailOnFoldable() {
         MaterialTheme(typography = ShiftclaTypography) {
@@ -103,7 +103,7 @@ class ShiftclaDetailScreenshotTest {
     }
 
     @PreviewTest
-    @Preview(name = "detail-tablet-1280", widthDp = 1280, heightDp = 800, showBackground = true)
+    @Preview(name = "detail-tablet-1280", widthDp = 1280, heightDp = 800, showBackground = true, locale = "zh")
     @Composable
     fun detailOnTablet() {
         MaterialTheme(typography = ShiftclaTypography) {
@@ -120,7 +120,7 @@ class ShiftclaDetailScreenshotTest {
      * 这里按 density 从 dp 换算；写死 dp 会得出"数学错了"的假结论。
      */
     @PreviewTest
-    @Preview(name = "detail-p0-open", widthDp = 402, heightDp = 874, showBackground = true)
+    @Preview(name = "detail-p0-open", widthDp = 402, heightDp = 874, showBackground = true, locale = "zh")
     @Composable
     fun detailOpeningFrame() {
         MaterialTheme(typography = ShiftclaTypography) {
@@ -175,32 +175,32 @@ class ShiftclaBlurRampScreenshotTest {
     }
 
     @PreviewTest
-    @Preview(name = "p100", widthDp = 402, heightDp = 874, showBackground = true)
+    @Preview(name = "p100", widthDp = 402, heightDp = 874, showBackground = true, locale = "zh")
     @Composable
     fun p100() = BackdropAt(1.0f)
 
     @PreviewTest
-    @Preview(name = "p60", widthDp = 402, heightDp = 874, showBackground = true)
+    @Preview(name = "p60", widthDp = 402, heightDp = 874, showBackground = true, locale = "zh")
     @Composable
     fun p60() = BackdropAt(0.6f)
 
     @PreviewTest
-    @Preview(name = "p30", widthDp = 402, heightDp = 874, showBackground = true)
+    @Preview(name = "p30", widthDp = 402, heightDp = 874, showBackground = true, locale = "zh")
     @Composable
     fun p30() = BackdropAt(0.3f)
 
     @PreviewTest
-    @Preview(name = "p12", widthDp = 402, heightDp = 874, showBackground = true)
+    @Preview(name = "p12", widthDp = 402, heightDp = 874, showBackground = true, locale = "zh")
     @Composable
     fun p12() = BackdropAt(0.12f)
 
     @PreviewTest
-    @Preview(name = "p04", widthDp = 402, heightDp = 874, showBackground = true)
+    @Preview(name = "p04", widthDp = 402, heightDp = 874, showBackground = true, locale = "zh")
     @Composable
     fun p04() = BackdropAt(0.04f)
 
     @PreviewTest
-    @Preview(name = "p00", widthDp = 402, heightDp = 874, showBackground = true)
+    @Preview(name = "p00", widthDp = 402, heightDp = 874, showBackground = true, locale = "zh")
     @Composable
     fun p00() = BackdropAt(0.0f)
 }
@@ -232,12 +232,12 @@ class ShiftclaAppIconScreenshotTest {
     }
 
     @PreviewTest
-    @Preview(name = "icon-square", widthDp = 108, heightDp = 108, showBackground = true)
+    @Preview(name = "icon-square", widthDp = 108, heightDp = 108, showBackground = true, locale = "zh")
     @Composable
     fun iconSquare() = IconCanvas(circleMask = false)
 
     @PreviewTest
-    @Preview(name = "icon-circle", widthDp = 108, heightDp = 108, showBackground = true)
+    @Preview(name = "icon-circle", widthDp = 108, heightDp = 108, showBackground = true, locale = "zh")
     @Composable
     fun iconCircle() = IconCanvas(circleMask = true)
 }
@@ -247,7 +247,7 @@ class ShiftclaAppIconScreenshotTest {
 class ShiftclaDrawerScreenshotTest {
 
     @PreviewTest
-    @Preview(name = "drawer-phone-402", widthDp = 402, heightDp = 874, showBackground = true)
+    @Preview(name = "drawer-phone-402", widthDp = 402, heightDp = 874, showBackground = true, locale = "zh")
     @Composable
     fun drawerOnPhone() {
         MaterialTheme(typography = ShiftclaTypography) {
@@ -260,7 +260,7 @@ class ShiftclaDrawerScreenshotTest {
     }
 
     @PreviewTest
-    @Preview(name = "drawer-tablet-1280", widthDp = 1280, heightDp = 800, showBackground = true)
+    @Preview(name = "drawer-tablet-1280", widthDp = 1280, heightDp = 800, showBackground = true, locale = "zh")
     @Composable
     fun drawerOnTablet() {
         MaterialTheme(typography = ShiftclaTypography) {
@@ -309,12 +309,12 @@ class ShiftclaDrawerBlurScreenshotTest {
     }
 
     @PreviewTest
-    @Preview(name = "closed", widthDp = 402, heightDp = 874, showBackground = true)
+    @Preview(name = "closed", widthDp = 402, heightDp = 874, showBackground = true, locale = "zh")
     @Composable
     fun closed() = Scene(drawerOpen = false)
 
     @PreviewTest
-    @Preview(name = "opened", widthDp = 402, heightDp = 874, showBackground = true)
+    @Preview(name = "opened", widthDp = 402, heightDp = 874, showBackground = true, locale = "zh")
     @Composable
     fun opened() = Scene(drawerOpen = true)
 }
@@ -329,7 +329,7 @@ class ShiftclaDrawerBlurScreenshotTest {
 class ShiftclaImportFlowScreenshotTest {
 
     @PreviewTest
-    @Preview(name = "import-sheet-empty", widthDp = 402, heightDp = 520, showBackground = true)
+    @Preview(name = "import-sheet-empty", widthDp = 402, heightDp = 520, showBackground = true, locale = "zh")
     @Composable
     fun sheetEmpty() {
         MaterialTheme(typography = ShiftclaTypography) {
@@ -340,7 +340,7 @@ class ShiftclaImportFlowScreenshotTest {
     }
 
     @PreviewTest
-    @Preview(name = "import-sheet-filled", widthDp = 402, heightDp = 520, showBackground = true)
+    @Preview(name = "import-sheet-filled", widthDp = 402, heightDp = 520, showBackground = true, locale = "zh")
     @Composable
     fun sheetFilled() {
         MaterialTheme(typography = ShiftclaTypography) {
@@ -355,7 +355,7 @@ class ShiftclaImportFlowScreenshotTest {
 
     /** 空课表 + 引导文案。 */
     @PreviewTest
-    @Preview(name = "empty-state", widthDp = 402, heightDp = 874, showBackground = true)
+    @Preview(name = "empty-state", widthDp = 402, heightDp = 874, showBackground = true, locale = "zh")
     @Composable
     fun emptyState() {
         MaterialTheme(typography = ShiftclaTypography) {
@@ -368,7 +368,7 @@ class ShiftclaImportFlowScreenshotTest {
 
     /** 解析中的加载遮罩。 */
     @PreviewTest
-    @Preview(name = "parsing", widthDp = 402, heightDp = 874, showBackground = true)
+    @Preview(name = "parsing", widthDp = 402, heightDp = 874, showBackground = true, locale = "zh")
     @Composable
     fun parsing() {
         MaterialTheme(typography = ShiftclaTypography) {

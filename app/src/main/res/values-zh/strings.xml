@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 中文文案。逐字沿用改造前的硬编码字符串，避免界面外观发生意外变化。 -->
+<resources>
+
+    <string name="app_name">Shiftcla</string>
+
+    <!-- ===== 侧边抽屉 ===== -->
+    <string name="drawer_import">导入教务数据</string>
+    <string name="drawer_api_config">API 配置</string>
+    <string name="drawer_sponsor">赞助</string>
+
+    <!-- ===== 看板 ===== -->
+    <string name="dashboard_menu">菜单</string>
+    <string name="dashboard_today_courses">今日课程</string>
+    <string name="dashboard_morning">上午课程</string>
+    <string name="dashboard_afternoon">下午课程</string>
+    <string name="dashboard_back_to_today">回到当天课程</string>
+    <string name="dashboard_no_class_title">这天没有课</string>
+    <string name="dashboard_no_class_body">这天没有排课，好好休息</string>
+    <string name="dashboard_ai_insight">AI INSIGHT / 今日建议</string>
+    <string name="dashboard_ai_assistant">AI 助手</string>
+
+    <!-- ===== 课程详情浮层 ===== -->
+    <string name="detail_ai_note">AI 备注：%1$s</string>
+    <string name="detail_parsing">AI 正在解析…</string>
+
+    <!-- ===== 空态 ===== -->
+    <string name="empty_before_term_title">学期还未开始</string>
+    <string name="empty_before_term_body">新学期还没开课\n先把教务数据导进来，开学第一天它就是现成的</string>
+    <string name="empty_after_term_title">学期已经过去了</string>
+    <string name="empty_after_term_fallback">学期结束啦，先好好松口气 ☕ 新学期课表出来后，点左上角菜单导进来就行</string>
+    <string name="empty_no_class_today_title">今天没有课</string>
+    <string name="empty_no_class_today_body">今天没有排课，好好休息</string>
+    <string name="empty_no_class_day_title">这天没有课</string>
+    <string name="empty_no_class_day_body">这天没有排课\n点「回到当天课程」回到今天，或换个日期看看</string>
+    <string name="empty_no_schedule_title">还没有课表</string>
+    <string name="empty_no_schedule_body">点左上角菜单 → 导入教务数据\n把教务文本丢给 AI，它会帮你排好</string>
+
+    <!-- ===== 导入面板 ===== -->
+    <string name="import_hint">粘贴教务文本、作息时间，或直接用大白话告诉 AI...</string>
+    <string name="import_pick_images">从相册选择图片（可多选）</string>
+    <string name="import_submit_parse">交由 AI 解析 ✨</string>
+    <string name="import_submit_modify">发送修改 ✨</string>
+    <string name="import_picked_image">已选图片</string>
+    <string name="import_remove_image">取消选择图片</string>
+
+    <!-- ===== API Key 弹窗 ===== -->
+    <string name="api_key_title">API Key</string>
+    <string name="api_key_body">填自己的 Key，只存在本机，不会上传。留空即等于不配置。</string>
+    <string name="api_key_multimodal_hint">需要支持多模态（图文识别）的大模型 Key，否则课表截图解析不了。</string>
+    <string name="api_key_save">保存</string>
+    <string name="api_key_clear">清除</string>
+
+    <!-- ===== 日历抽屉 ===== -->
+    <string name="calendar_back_to_today">回到今日</string>
+    <string name="calendar_month_pattern">yyyy\'年\' M\'月\'</string>
+
+    <!-- ===== 提示与错误 ===== -->
+    <string name="msg_empty_input">内容为空，先粘贴点东西或选张图吧</string>
+    <string name="msg_need_api_key">请先配置 API Key</string>
+    <string name="msg_parse_failed">解析失败：网络异常或 AI 没返回合法 JSON</string>
+    <string name="msg_parse_failed_reply">没解析成功，换个说法再试试？</string>
+    <string name="msg_no_courses">AI 没从这段内容里找到任何课程</string>
+    <string name="msg_no_courses_reply">这段内容里我没找到课程</string>
+    <string name="msg_unknown_error">未知错误</string>
+    <string name="msg_updated_count">已更新 %1$d 门课</string>
+
+</resources>

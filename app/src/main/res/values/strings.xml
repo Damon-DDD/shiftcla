@@ -1,4 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  默认语言 = 英文。
+
+  为什么默认放英文而不是中文：Android 在找不到匹配语言时会退回 values/。
+  本 App 要同时服务国内与海外用户 —— 把英文设成兜底，任何非中文语区的用户
+  都能拿到可读界面；中文用户走 values-zh/ 覆盖。
+  （反过来设的话，德语/法语等用户会看到一脸中文。）
+-->
 <resources>
+
     <string name="app_name">Shiftcla</string>
+
+    <!-- ===== 侧边抽屉 ===== -->
+    <string name="drawer_import">Import schedule</string>
+    <string name="drawer_api_config">API settings</string>
+    <string name="drawer_sponsor">Sponsor</string>
+
+    <!-- ===== 看板 ===== -->
+    <string name="dashboard_menu">Menu</string>
+    <string name="dashboard_today_courses">Today\'s Courses</string>
+    <string name="dashboard_morning">Morning</string>
+    <string name="dashboard_afternoon">Afternoon</string>
+    <string name="dashboard_back_to_today">Back to today</string>
+    <string name="dashboard_no_class_title">No classes</string>
+    <string name="dashboard_no_class_body">Nothing scheduled — take a break</string>
+    <string name="dashboard_ai_insight">AI INSIGHT · TODAY\'S TIP</string>
+    <string name="dashboard_ai_assistant">AI Assistant</string>
+
+    <!-- ===== 课程详情浮层 ===== -->
+    <string name="detail_ai_note">AI note: %1$s</string>
+    <string name="detail_parsing">AI is reading…</string>
+
+    <!-- ===== 空态 ===== -->
+    <string name="empty_before_term_title">The term hasn\'t started yet</string>
+    <string name="empty_before_term_body">No classes yet\nImport your schedule now and it\'ll be ready on day one</string>
+    <string name="empty_after_term_title">The term is over</string>
+    <string name="empty_after_term_fallback">Term\'s over — enjoy the break ☕ Import next term\'s schedule when it\'s out.</string>
+    <string name="empty_no_class_today_title">No classes today</string>
+    <string name="empty_no_class_today_body">Nothing scheduled today — take a break</string>
+    <string name="empty_no_class_day_title">No classes</string>
+    <string name="empty_no_class_day_body">Nothing scheduled\nTap “Back to today”, or pick another date</string>
+    <string name="empty_no_schedule_title">No schedule yet</string>
+    <string name="empty_no_schedule_body">Tap the menu at the top-left → Import schedule\nPaste your timetable and AI will sort it out</string>
+
+    <!-- ===== 导入面板 ===== -->
+    <string name="import_hint">Paste your timetable text, or just tell the AI what you want…</string>
+    <string name="import_pick_images">Pick images from gallery (multi-select)</string>
+    <string name="import_submit_parse">Parse with AI ✨</string>
+    <string name="import_submit_modify">Send changes ✨</string>
+    <string name="import_picked_image">Selected image</string>
+    <string name="import_remove_image">Remove image</string>
+
+    <!-- ===== API Key 弹窗 ===== -->
+    <string name="api_key_title">API Key</string>
+    <string name="api_key_body">Stored on this device only, never uploaded. Leave it blank to skip.</string>
+    <string name="api_key_multimodal_hint">Needs a multimodal (vision-capable) model key — otherwise timetable screenshots can\'t be parsed.</string>
+    <string name="api_key_save">Save</string>
+    <string name="api_key_clear">Clear</string>
+
+    <!-- ===== 日历抽屉 ===== -->
+    <string name="calendar_back_to_today">Today</string>
+    <!-- 月份标题格式（DateTimeFormatter 模式，'…' 内为字面量） -->
+    <string name="calendar_month_pattern">MMMM yyyy</string>
+
+    <!-- ===== 提示与错误 ===== -->
+    <string name="msg_empty_input">Nothing to parse — paste something or pick an image first</string>
+    <string name="msg_need_api_key">Please set your API Key first</string>
+    <string name="msg_parse_failed">Parse failed: network problem, or the AI didn\'t return valid JSON</string>
+    <string name="msg_parse_failed_reply">That didn\'t work — try phrasing it differently?</string>
+    <string name="msg_no_courses">The AI couldn\'t find any courses in that content</string>
+    <string name="msg_no_courses_reply">I couldn\'t find any courses in that</string>
+    <string name="msg_unknown_error">Unknown error</string>
+    <string name="msg_updated_count">Updated %1$d courses</string>
+
 </resources>

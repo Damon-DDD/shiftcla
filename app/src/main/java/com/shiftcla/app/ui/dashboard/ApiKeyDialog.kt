@@ -20,9 +20,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import com.shiftcla.app.R
 
 /**
  * API Key 配置弹窗。
@@ -49,7 +51,7 @@ fun ApiKeyDialog(
         containerColor = Color.White,
         title = {
             Text(
-                text = "API Key",
+                text = stringResource(R.string.api_key_title),
                 style = MaterialTheme.typography.titleMedium,
                 color = ShiftclaTokens.TextPrimary,
                 fontWeight = FontWeight.Bold,
@@ -58,13 +60,13 @@ fun ApiKeyDialog(
         text = {
             Column(Modifier.fillMaxWidth()) {
                 Text(
-                    text = "填自己的 Key，只存在本机，不会上传。留空即等于不配置。",
+                    text = stringResource(R.string.api_key_body),
                     style = MaterialTheme.typography.bodySmall,
                     color = ShiftclaTokens.TextTertiary,
                 )
                 Spacer(Modifier.height(8.dp))
                 Text(
-                    text = "需要支持多模态（图文识别）的大模型 Key，否则课表截图解析不了。",
+                    text = stringResource(R.string.api_key_multimodal_hint),
                     style = MaterialTheme.typography.bodySmall,
                     color = ShiftclaTokens.Primary,
                     fontWeight = FontWeight.Medium,
@@ -94,12 +96,16 @@ fun ApiKeyDialog(
         },
         confirmButton = {
             TextButton(onClick = { onSave(text.trim()) }) {
-                Text("保存", color = ShiftclaTokens.Primary, fontWeight = FontWeight.Medium)
+                Text(
+                    stringResource(R.string.api_key_save),
+                    color = ShiftclaTokens.Primary,
+                    fontWeight = FontWeight.Medium,
+                )
             }
         },
         dismissButton = {
             TextButton(onClick = { text = ""; onClear() }) {
-                Text("清除", color = ShiftclaTokens.TextTertiary)
+                Text(stringResource(R.string.api_key_clear), color = ShiftclaTokens.TextTertiary)
             }
         },
     )

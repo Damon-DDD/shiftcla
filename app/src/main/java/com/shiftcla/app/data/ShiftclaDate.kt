@@ -73,6 +73,33 @@ object ShiftclaDate {
     private val WEEKDAY_EN = arrayOf(
         "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday",
     )
+    private val WEEKDAY_EN_SHORT = arrayOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+
+    // ------------------------------------------------------------------ 本地化
+    //
+    // 为什么不走 strings.xml：本对象要保持"纯 Kotlin、无 Context"，否则既有的
+    // JVM 单测就得拖上 Robolectric。日期这部分本来就该按 Locale 交给
+    // DateTimeFormatter/词表处理，而不是查字符串资源。
+    //
+    // 只区分「中文 / 其他」两档，和 strings.xml 的 values / values-zh 策略一致：
+    // 非中文语区一律走英文，保证德语、法语用户也能读懂。
+
+    private fun isZh(locale: Locale): Boolean = locale.language == "zh"
+
+    private fun weekdayShort(dow: Int, locale: Locale): String =
+        if (isZh(locale)) WEEKDAY_CN[dow - 1] else WEEKDAY_EN_SHORT[dow - 1]
+
+    /** "10月24日" / "Oct 24" */
+    private fun monthDayLabel(month: Int, day: Int, locale: Locale): String =
+        if (isZh(locale)) "${month}月${day}日" else "${MONTH_ABBR[month - 1]} $day"
+
+    /** "2027年1月10日" / "Jan 10, 2027" */
+    private fun fullDateLabel(year: Int, month: Int, day: Int, locale: Locale): String =
+        if (isZh(locale)) "${year}年${month}月${day}日" else "${MONTH_ABBR[month - 1]} $day, $year"
+
+    private fun todayWord(locale: Locale) = if (isZh(locale)) "今天" else "Today"
+    private fun yesterdayWord(locale: Locale) = if (isZh(locale)) "昨天" else "Yesterday"
+    private fun tomorrowWord(locale: Locale) = if (isZh(locale)) "明天" else "Tomorrow"
 
     /** 一次算好，避免在组合里反复取时钟。 */
     data class Snapshot(
@@ -101,7 +128,10 @@ object ShiftclaDate {
         val termKey: String,
     )
 
-    fun snapshot(now: Calendar = Calendar.getInstance()): Snapshot {
+    fun snapshot(
+        now: Calendar = Calendar.getInstance(),
+        locale: Locale = Locale.getDefault(),
+    ): Snapshot {
         val dow = dayOfWeekOf(now)
         val month = now.get(Calendar.MONTH) + 1
         val day = now.get(Calendar.DAY_OF_MONTH)
@@ -112,14 +142,19 @@ object ShiftclaDate {
 
         return Snapshot(
             dayOfWeek = dow,
-            currentDateLabel = "$month" + "月$day" + "日 · 今天",
+            currentDateLabel = monthDayLabel(month, day, locale) + " · " + todayWord(locale),
             dateLabel = "${MONTH_ABBR[month - 1]} $day",
             weekdayLabel = WEEKDAY_EN[dow - 1],
             weekNumber = week,
             weekLabel = week?.let { "Week $it" },
             phase = phase,
             termEndLabel = termEnd()?.let {
-                "${it.get(Calendar.YEAR)}" + "年${it.get(Calendar.MONTH) + 1}" + "月${it.get(Calendar.DAY_OF_MONTH)}" + "日"
+                fullDateLabel(
+                    it.get(Calendar.YEAR),
+                    it.get(Calendar.MONTH) + 1,
+                    it.get(Calendar.DAY_OF_MONTH),
+                    locale,
+                )
             },
             // 把"第几教学周"也告诉模型 —— 它要靠这个判断"本周"是第几周
             promptContext = "今天是 $year" + "年$month" + "月$day" + "日，" +
@@ -142,24 +177,32 @@ object ShiftclaDate {
     }
 
     /** 某一天的快照（星期几 / 教学周 / 学期阶段都按这一天算，不是按真实今天）。 */
-    fun snapshot(date: LocalDate): Snapshot = snapshot(toCalendar(date))
+    fun snapshot(date: LocalDate, locale: Locale = Locale.getDefault()): Snapshot =
+        snapshot(toCalendar(date), locale)
 
     /**
-     * 日期的后缀文案：「今天 / 昨天 / 明天 / 周X」。左右滑切日时，
-     * Header 的日期要跟着选中日期走，不能永远挂着「今天」。
+     * 日期的后缀文案：「今天 / 昨天 / 明天 / 周X」（英文 Today / Yesterday / Tomorrow / Mon）。
+     * 左右滑切日时，Header 的日期要跟着选中日期走，不能永远挂着「今天」。
      */
-    fun dateSuffix(date: LocalDate, today: LocalDate = LocalDate.now()): String =
-        when (date) {
-            today -> "今天"
-            today.minusDays(1) -> "昨天"
-            today.plusDays(1) -> "明天"
-            // WEEKDAY_CN 本身就是「周一」这种完整写法，别再拼一个"周"字（测出来过双周）
-            else -> WEEKDAY_CN[date.dayOfWeek.value - 1]
-        }
+    fun dateSuffix(
+        date: LocalDate,
+        today: LocalDate = LocalDate.now(),
+        locale: Locale = Locale.getDefault(),
+    ): String = when (date) {
+        today -> todayWord(locale)
+        today.minusDays(1) -> yesterdayWord(locale)
+        today.plusDays(1) -> tomorrowWord(locale)
+        // 词表里本身就是「周一」这种完整写法，别再拼一个"周"字（测出来过双周）
+        else -> weekdayShort(date.dayOfWeek.value, locale)
+    }
 
-    /** 手机端 Header 的日期文案："10月2日 · 周五"。 */
-    fun currentDateLabel(date: LocalDate, today: LocalDate = LocalDate.now()): String =
-        "${date.monthValue}月${date.dayOfMonth}日 · ${dateSuffix(date, today)}"
+    /** 手机端 Header 的日期文案："10月2日 · 周五" / "Oct 2 · Fri"。 */
+    fun currentDateLabel(
+        date: LocalDate,
+        today: LocalDate = LocalDate.now(),
+        locale: Locale = Locale.getDefault(),
+    ): String = monthDayLabel(date.monthValue, date.dayOfMonth, locale) +
+            " · " + dateSuffix(date, today, locale)
 
     /** 某个月的网格（周一开头，固定 6 行 42 格），日历面板直接渲。 */
     fun monthGrid(month: YearMonth): List<LocalDate> {

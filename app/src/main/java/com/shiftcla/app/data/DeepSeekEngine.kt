@@ -26,6 +26,7 @@ import kotlinx.serialization.json.buildJsonArray
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.Json
+import java.util.Locale
 
 /* ============================================================================
  *  DeepSeekEngine · 把教务系统的原始文本丢给 DeepSeek，拿回结构化课程
@@ -157,9 +158,32 @@ object DeepSeekEngine {
      *
      * 没有这句的话，用户写「明天下午的课」「这周五」这类相对日期，模型只能瞎猜；
      * 有了它才能落到正确的 dayOfWeek 上。
+     *
+     * @param locale 界面语言，决定让模型用哪种语言写 globalSummary / aiNote
      */
-    internal fun buildSystemPrompt(todayContext: String? = null): String =
-        if (todayContext.isNullOrBlank()) SYSTEM_PROMPT else "$todayContext\n$SYSTEM_PROMPT"
+    internal fun buildSystemPrompt(
+        todayContext: String? = null,
+        locale: Locale = Locale.getDefault(),
+    ): String = buildString {
+        if (!todayContext.isNullOrBlank()) append(todayContext).append('\n')
+        append(SYSTEM_PROMPT)
+        append(outputLanguageRule(locale))
+    }
+
+    /**
+     * 输出语言规则。
+     *
+     * 提示词本身保持中文（模型读中文毫无问题），这里只约束它**写出来的字**用哪种语言：
+     *  · globalSummary / aiNote 是展示给人看的话 → 必须跟界面语言一致；
+     *  · courseName / teacher / location 是原始数据 → 保持原样，绝不翻译。
+     */
+    private fun outputLanguageRule(locale: Locale): String =
+        if (locale.language == "zh") {
+            ""
+        } else {
+            "\n【输出语言】globalSummary 与每条 aiNote 必须用**英文**书写；" +
+                    "courseName / teacher / location 等字段保持原始数据里的语言，不要翻译。"
+        }
 
     /** 客户端懒加载：只有真正发请求时才建连接池。 */
     private val client: HttpClient by lazy {

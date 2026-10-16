@@ -58,12 +58,12 @@ class ShiftclaCalendarScreenshotTest {
     }
 
     @PreviewTest
-    @Preview(name = "calendar-phone", widthDp = 402, heightDp = 874, showBackground = true)
+    @Preview(name = "calendar-phone", widthDp = 402, heightDp = 874, showBackground = true, locale = "zh")
     @Composable
     fun calendarOnPhone() = CalendarScreen(phone = true)
 
     @PreviewTest
-    @Preview(name = "calendar-tablet", widthDp = 1280, heightDp = 800, showBackground = true)
+    @Preview(name = "calendar-tablet", widthDp = 1280, heightDp = 800, showBackground = true, locale = "zh")
     @Composable
     fun calendarOnTablet() = CalendarScreen(phone = false)
 }

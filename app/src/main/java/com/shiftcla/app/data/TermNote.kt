@@ -2,6 +2,8 @@
 
 package com.shiftcla.app.data
 
+import java.util.Locale
+
 /**
  * 学期结束后那句「季节性文案」。
  *
@@ -15,13 +17,14 @@ package com.shiftcla.app.data
  */
 object TermNote {
 
-    /**
-     * 兜底文案：**没配 API Key，或者请求失败**时用。
+    /*
+     * 兜底文案（没配 API Key / 请求失败时显示的那句）已经搬到 strings.xml：
+     * `empty_after_term_fallback`。搬走的原因是它要跟着界面语言切换，
+     * 而这里是纯 Kotlin 对象、拿不到资源。
      *
-     * 措辞刻意和 AI 那版保持同一口径（放松 + 提醒），这样降级后界面不会"变了个风格"。
+     * ⚠️ 因此 [ShiftclaViewModel] 在 AI 写失败时应该把 termNote 置为 **null**，
+     * 而不是塞一段写死的中文 —— 否则英文用户会看到中文兜底。
      */
-    const val FALLBACK: String =
-        "学期结束啦，先好好松口气 ☕ 新学期课表出来后，点左上角菜单导进来就行"
 
     private const val KEY_PREFIX = "term_note_"
 
@@ -46,8 +49,12 @@ object TermNote {
      * 而"拼歪了"在真机上表现为"AI 答得莫名其妙"，很难定位。
      *
      * @param snapshot 当前日期快照（[ShiftclaDate.Snapshot.phase] 应为 AfterTerm）
+     * @param locale   界面语言，决定让 AI 用哪种语言写这句话
      */
-    fun prompt(snapshot: ShiftclaDate.Snapshot): String = buildString {
+    fun prompt(
+        snapshot: ShiftclaDate.Snapshot,
+        locale: Locale = Locale.getDefault(),
+    ): String = buildString {
         // promptContext 形如「今天是 2026年1月20日，周二（dayOfWeek=2）…」，
         // 取到括号前就够 AI 定位日期了，不用把 dayOfWeek 这种内部编号丢给它。
         append("今天是 ").append(snapshot.termKeyDateLabel()).append("。")
@@ -56,6 +63,10 @@ object TermNote {
         append("了。")
         append("请写一句话（40 字以内）给我：")
         append("先说一句让我放松下来的话，再顺带提醒我导入下个学期的课表。")
+        // 非中文界面：这句话要写给英文用户看
+        if (locale.language != "zh") {
+            append(" 用英文写（Write it in English）。")
+        }
     }
 
     /** "今天是 2026年10月1日，周四（dayOfWeek=4）…" → "2026年10月1日，周四" */

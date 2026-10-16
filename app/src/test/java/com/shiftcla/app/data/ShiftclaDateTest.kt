@@ -44,9 +44,15 @@ class ShiftclaDateTest {
 
     @Test
     fun `手机端文案是中文日期加今天`() {
-        val s = ShiftclaDate.snapshot(cal(2026, 10, 1))
+        val s = ShiftclaDate.snapshot(cal(2026, 10, 1), java.util.Locale.CHINESE)
         assertEquals("10月1日 · 今天", s.currentDateLabel)
         assertEquals(4, s.dayOfWeek)
+    }
+
+    @Test
+    fun `手机端文案英文侧是 Oct 1 · Today`() {
+        val s = ShiftclaDate.snapshot(cal(2026, 10, 1), java.util.Locale.ENGLISH)
+        assertEquals("Oct 1 · Today", s.currentDateLabel)
     }
 
     @Test
@@ -128,9 +134,16 @@ class ShiftclaDateTest {
 
     @Test
     fun `学期结束文案里带上结束日期`() {
-        val s = ShiftclaDate.snapshot(cal(2027, 2, 4))
+        val zh = java.util.Locale.CHINESE
+        val s = ShiftclaDate.snapshot(cal(2027, 2, 4), zh)
         assertEquals("2027年1月10日", s.termEndLabel)
         assertTrue(s.termKey.isNotBlank(), "termKey 是季节性文案的缓存键，不能为空")
+
+        // 英文侧换成 "Jan 10, 2027"
+        assertEquals(
+            "Jan 10, 2027",
+            ShiftclaDate.snapshot(cal(2027, 2, 4), java.util.Locale.ENGLISH).termEndLabel,
+        )
     }
 
     // ---------------------------------------------------------------- 时间解析

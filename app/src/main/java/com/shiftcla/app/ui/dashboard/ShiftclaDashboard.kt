@@ -5,6 +5,7 @@
 package com.shiftcla.app.ui.dashboard
 
 import kotlinx.serialization.Serializable
+import com.shiftcla.app.R
 import com.shiftcla.app.data.ShiftclaDate
 import com.shiftcla.app.data.TermPhase
 import androidx.compose.animation.AnimatedVisibility
@@ -83,6 +84,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -427,7 +429,7 @@ private fun BackToTodayFloating(
             .padding(horizontal = 18.dp, vertical = 11.dp),
     ) {
         Text(
-            text = "回到当天课程",
+            text = stringResource(R.string.dashboard_back_to_today),
             style = MaterialTheme.typography.labelLarge.copy(fontSize = 13.sp),
             color = Color.White,
             fontWeight = FontWeight.Bold,
@@ -702,7 +704,7 @@ private fun CompactDashboard(
             ) {
                 Icon(
                     imageVector = Icons.Filled.Menu,
-                    contentDescription = "菜单",
+                    contentDescription = stringResource(R.string.dashboard_menu),
                     tint = Color.White,
                     modifier = Modifier.size(18.dp),
                 )
@@ -731,7 +733,7 @@ private fun CompactDashboard(
 
         // ---- 大标题 ----
         Text(
-            text = "今日课程",
+            text = stringResource(R.string.dashboard_today_courses),
             style = MaterialTheme.typography.headlineSmall,
             color = ShiftclaTokens.TextPrimary,
             modifier = Modifier.padding(horizontal = 24.dp),
@@ -798,8 +800,8 @@ private fun CompactDashboard(
                 if (allCourses.isNotEmpty() && pageData.courses.isEmpty() && pageSnap.phase == TermPhase.InTerm) {
                     EmptyCoursesHint(
                         copy = EmptyCopy(
-                            title = "这天没有课",
-                            body = "这天没有排课，好好休息",
+                            title = stringResource(R.string.dashboard_no_class_title),
+                            body = stringResource(R.string.dashboard_no_class_body),
                             kind = EmptyKind.Sparkle,
                         ),
                         modifier = Modifier
@@ -889,7 +891,7 @@ private fun ExpandedDashboard(
             ) {
                 Icon(
                     imageVector = Icons.Filled.Menu,
-                    contentDescription = "菜单",
+                    contentDescription = stringResource(R.string.dashboard_menu),
                     tint = Color.White,
                     modifier = Modifier.size(24.dp),
                 )
@@ -1038,8 +1040,8 @@ private fun ExpandedDashboard(
             if (allCourses.isNotEmpty() && pageData.courses.isEmpty() && pageSnap.phase == TermPhase.InTerm) {
                 EmptyCoursesHint(
                     copy = EmptyCopy(
-                        title = "这天没有课",
-                        body = "这天没有排课，好好休息",
+                        title = stringResource(R.string.dashboard_no_class_title),
+                        body = stringResource(R.string.dashboard_no_class_body),
                         kind = EmptyKind.Sparkle,
                     ),
                     modifier = Modifier
@@ -1324,7 +1326,7 @@ private fun AiInsightCard(text: String, modifier: Modifier = Modifier) {
         Spacer(Modifier.width(12.dp))
         Column {
             Text(
-                text = "AI INSIGHT / 今日建议",
+                text = stringResource(R.string.dashboard_ai_insight),
                 style = MaterialTheme.typography.labelSmall,
                 color = ShiftclaTokens.Primary,
                 fontWeight = FontWeight.Bold,
@@ -1518,7 +1520,7 @@ private fun FloatingAiButton(
     ) {
         Icon(
             imageVector = Icons.Filled.AutoAwesome,
-            contentDescription = "AI 助手",
+            contentDescription = stringResource(R.string.dashboard_ai_assistant),
             tint = Color.White,
             modifier = Modifier.size(26.dp),
         )

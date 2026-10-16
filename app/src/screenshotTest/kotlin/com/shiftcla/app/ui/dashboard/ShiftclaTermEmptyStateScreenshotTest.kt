@@ -39,11 +39,11 @@ class ShiftclaTermEmptyStateScreenshotTest {
 
     /** 预备周（学期开始前）：日历图标 + 「学期还未开始」。 */
     @PreviewTest
-    @Preview(name = "before-term", widthDp = 402, heightDp = 874, showBackground = true)
+    @Preview(name = "before-term", widthDp = 402, heightDp = 874, showBackground = true, locale = "zh")
     @Composable
     fun beforeTerm() {
         EmptyScreen(
-            emptyCopyFor(TermPhase.BeforeTerm, hasAnyCourses = true, termNote = null),
+            emptyCopyOf(emptyCaseFor(TermPhase.BeforeTerm, hasAnyCourses = true)),
             dateLabel = "9月10日 · 今天",
         )
     }
@@ -53,13 +53,12 @@ class ShiftclaTermEmptyStateScreenshotTest {
      * 这里固定注入一句 AI 文案，避免截图依赖真机才有的 API Key / 网络。
      */
     @PreviewTest
-    @Preview(name = "after-term", widthDp = 402, heightDp = 874, showBackground = true)
+    @Preview(name = "after-term", widthDp = 402, heightDp = 874, showBackground = true, locale = "zh")
     @Composable
     fun afterTerm() {
         EmptyScreen(
-            emptyCopyFor(
-                TermPhase.AfterTerm,
-                hasAnyCourses = true,
+            emptyCopyOf(
+                emptyCaseFor(TermPhase.AfterTerm, hasAnyCourses = true),
                 termNote = "考完了，先好好睡一觉，新学期课表出来记得导进来",
             ),
             dateLabel = "2月4日 · 今天",
@@ -68,13 +67,51 @@ class ShiftclaTermEmptyStateScreenshotTest {
 
     /** 学期后但 AI 文案还没回来（未配 Key / 请求中）：应退回兜底文案，不留空白。 */
     @PreviewTest
-    @Preview(name = "after-term-fallback", widthDp = 402, heightDp = 874, showBackground = true)
+    @Preview(
+        name = "after-term-fallback",
+        widthDp = 402,
+        heightDp = 874,
+        showBackground = true,
+        locale = "zh",
+    )
     @Composable
     fun afterTermFallback() {
-        // termNote=null → emptyCopyFor 内部退回 TermNote.FALLBACK
+        // termNote = null → emptyCopyOf 内部退回 R.string.empty_after_term_fallback
         EmptyScreen(
-            emptyCopyFor(TermPhase.AfterTerm, hasAnyCourses = true, termNote = null),
+            emptyCopyOf(emptyCaseFor(TermPhase.AfterTerm, hasAnyCourses = true)),
             dateLabel = "2月4日 · 今天",
+        )
+    }
+
+    // ---------------------------------------------------------------- 英文侧
+
+    /**
+     * 英文界面下的空态：确认资源真的按语言切换了。
+     * 有这张基准图，才说明"国际化不是只改了文档"。
+     */
+    @PreviewTest
+    @Preview(name = "after-term-en", widthDp = 402, heightDp = 874, showBackground = true, locale = "en")
+    @Composable
+    fun afterTermEnglish() {
+        EmptyScreen(
+            emptyCopyOf(emptyCaseFor(TermPhase.AfterTerm, hasAnyCourses = true)),
+            dateLabel = "Feb 4 · Today",
+        )
+    }
+
+    @PreviewTest
+    @Preview(
+        name = "before-term-en",
+        widthDp = 402,
+        heightDp = 874,
+        showBackground = true,
+        locale = "en",
+    )
+    @Composable
+    fun beforeTermEnglish() {
+        EmptyScreen(
+            emptyCopyOf(emptyCaseFor(TermPhase.BeforeTerm, hasAnyCourses = true)),
+            dateLabel = "Sep 10 · Today",
         )
     }
 }

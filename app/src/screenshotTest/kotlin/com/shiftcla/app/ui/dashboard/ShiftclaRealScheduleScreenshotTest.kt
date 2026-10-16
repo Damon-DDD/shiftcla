@@ -26,6 +26,16 @@ import java.util.Calendar
  */
 class ShiftclaRealScheduleScreenshotTest {
 
+    /**
+     * 这组基准是**中文**截图。
+     *
+     * ⚠️ 必须显式传 locale：`@Preview(locale = "zh")` 只决定**字符串资源**取哪一套，
+     * 管不到 `Locale.getDefault()`。而日期文案（"10月1日 · 今天"）是
+     * [ShiftclaDate] 按 `Locale` 拼的 —— 不显式指定的话，测试机是英文就渲染出
+     * "Oct 1 · Today"，基准图会莫名其妙地不稳。测试里一律显式传。
+     */
+    private val ZH = java.util.Locale.CHINESE
+
     private fun cal(y: Int, m: Int, d: Int) = Calendar.getInstance().apply {
         clear(); set(y, m - 1, d)
     }
@@ -68,7 +78,7 @@ class ShiftclaRealScheduleScreenshotTest {
      * 唯一区别是日期由测试指定，这样截图才能稳定复现。
      */
     private fun realDashboard(y: Int, m: Int, d: Int): DashboardData {
-        val snap = ShiftclaDate.snapshot(cal(y, m, d))
+        val snap = ShiftclaDate.snapshot(cal(y, m, d), ZH)
         val today = todayCoursesOf(mySchedule, snap)
         return DashboardData(
             currentDate = snap.currentDateLabel,
@@ -116,13 +126,13 @@ class ShiftclaRealScheduleScreenshotTest {
      * 修复前这里会多出两门双周课。
      */
     @PreviewTest
-    @Preview(name = "thu-week3", widthDp = 402, heightDp = 874, showBackground = true)
+    @Preview(name = "thu-week3", widthDp = 402, heightDp = 874, showBackground = true, locale = "zh")
     @Composable
     fun thursdayWeek3() = Screen(2026, 10, 1)
 
     /** 周二 · 第 2 教学周：三门全上，按 1-2 → 3-4 → 9-12 节排序。 */
     @PreviewTest
-    @Preview(name = "tue-week2", widthDp = 402, heightDp = 874, showBackground = true)
+    @Preview(name = "tue-week2", widthDp = 402, heightDp = 874, showBackground = true, locale = "zh")
     @Composable
     fun tuesdayWeek2() = Screen(2026, 9, 22)
 
@@ -132,7 +142,7 @@ class ShiftclaRealScheduleScreenshotTest {
      * 修复前这个日期会算出"第 17 周"，把实践课（14-17）也一起漏掉。
      */
     @PreviewTest
-    @Preview(name = "thu-week16", widthDp = 402, heightDp = 874, showBackground = true)
+    @Preview(name = "thu-week16", widthDp = 402, heightDp = 874, showBackground = true, locale = "zh")
     @Composable
     fun thursdayWeek16() = Screen(2026, 12, 31)
 
@@ -144,7 +154,7 @@ class ShiftclaRealScheduleScreenshotTest {
      * 理由：预备周压根没开课，列出来的都是"开学第一周才上"的安排。
      */
     @PreviewTest
-    @Preview(name = "before-term", widthDp = 402, heightDp = 874, showBackground = true)
+    @Preview(name = "before-term", widthDp = 402, heightDp = 874, showBackground = true, locale = "zh")
     @Composable
     fun beforeTerm() = PhaseScreen(2026, 9, 10)
 
@@ -156,7 +166,7 @@ class ShiftclaRealScheduleScreenshotTest {
      * 真机上这句来自 `DeepSeekEngine.writeTermNote`，失败则退回 `TermNote.FALLBACK`。
      */
     @PreviewTest
-    @Preview(name = "after-term", widthDp = 402, heightDp = 874, showBackground = true)
+    @Preview(name = "after-term", widthDp = 402, heightDp = 874, showBackground = true, locale = "zh")
     @Composable
     fun afterTerm() = PhaseScreen(
         y = 2027, m = 2, d = 4,
@@ -165,21 +175,23 @@ class ShiftclaRealScheduleScreenshotTest {
 
     /** 兜底文案版：没配 API Key 或请求失败时的样子（不能是空白）。 */
     @PreviewTest
-    @Preview(name = "after-term-fallback", widthDp = 402, heightDp = 874, showBackground = true)
+    @Preview(name = "after-term-fallback", widthDp = 402, heightDp = 874, showBackground = true, locale = "zh")
     @Composable
     fun afterTermFallback() = PhaseScreen(2027, 2, 4, termNote = null)
 
     /** 学期外的空态渲染：日期照旧来自设备时钟，只是课表不再显示。 */
     @Composable
     private fun PhaseScreen(y: Int, m: Int, d: Int, termNote: String? = null) {
-        val snap = ShiftclaDate.snapshot(cal(y, m, d))
+        val snap = ShiftclaDate.snapshot(cal(y, m, d), ZH)
         MaterialTheme(typography = ShiftclaTypography) {
             ShiftclaApp(
                 data = realDashboard(y, m, d),
                 animateOverlay = false,
-                emptyCopy = emptyCopyFor(
-                    phase = snap.phase,
-                    hasAnyCourses = true,
+                emptyCopy = emptyCopyOf(
+                    case = emptyCaseFor(
+                        phase = snap.phase,
+                        hasAnyCourses = true,
+                    ),
                     termNote = termNote,
                 ),
             )
@@ -188,7 +200,7 @@ class ShiftclaRealScheduleScreenshotTest {
 
     /** 同一份数据在平板宽度下的样子（分区标题 + 大屏建议卡）。 */
     @PreviewTest
-    @Preview(name = "tue-week2-tablet", widthDp = 1280, heightDp = 800, showBackground = true)
+    @Preview(name = "tue-week2-tablet", widthDp = 1280, heightDp = 800, showBackground = true, locale = "zh")
     @Composable
     fun tuesdayWeek2Tablet() {
         MaterialTheme(typography = ShiftclaTypography) {

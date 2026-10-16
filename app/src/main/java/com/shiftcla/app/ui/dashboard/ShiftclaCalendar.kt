@@ -32,12 +32,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.shiftcla.app.R
 import com.shiftcla.app.data.ShiftclaDate
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.time.YearMonth
 import kotlin.math.abs
 
@@ -133,13 +137,20 @@ internal fun ShiftclaCalendarPanel(
             }
             .padding(start = 24.dp, end = 24.dp, top = 24.dp, bottom = 24.dp),
     ) {
-        // ---- 月份标题行：‹  2026年 10月  › ----
+        // ---- 月份标题行：‹  2026年 10月  › / ‹  October 2026  › ----
+        // 格式模式放在资源里（中文 yyyy年 M月 / 英文 MMMM yyyy），
+        // 用设备 locale 交给 DateTimeFormatter 拼，避免在代码里写 if (中文)。
+        val monthPattern = stringResource(R.string.calendar_month_pattern)
+        val monthLocale = LocalConfiguration.current.locales[0]
+        val monthTitle = remember(displayedMonth, monthLocale, monthPattern) {
+            displayedMonth.format(DateTimeFormatter.ofPattern(monthPattern, monthLocale))
+        }
         Row(verticalAlignment = Alignment.CenterVertically) {
             MonthNavButton(icon = Icons.AutoMirrored.Filled.KeyboardArrowLeft) {
                 displayedMonth = displayedMonth.minusMonths(1)
             }
             Text(
-                text = "${displayedMonth.year}年 ${displayedMonth.monthValue}月",
+                text = monthTitle,
                 style = MaterialTheme.typography.headlineSmall.copy(fontSize = 22.sp),
                 color = ShiftclaTokens.TextPrimary,
                 fontWeight = FontWeight.Bold,
@@ -163,7 +174,7 @@ internal fun ShiftclaCalendarPanel(
                     .padding(horizontal = 14.dp, vertical = 7.dp),
             ) {
                 Text(
-                    text = "回到今日",
+                    text = stringResource(R.string.calendar_back_to_today),
                     style = MaterialTheme.typography.labelLarge.copy(fontSize = 13.sp),
                     color = t.TodayChipText,
                     fontWeight = FontWeight.Bold,

@@ -48,20 +48,45 @@ class DateSwitchTest {
     // ------------------------------------------------------------ 日期文案
 
     @Test
-    fun `日期后缀今天昨天明天周X`() {
+    fun `日期后缀今天昨天明天周X（中文）`() {
         val today = LocalDate.of(2026, 10, 1)
-        assertEquals("今天", ShiftclaDate.dateSuffix(today, today))
-        assertEquals("昨天", ShiftclaDate.dateSuffix(today.minusDays(1), today))
-        assertEquals("明天", ShiftclaDate.dateSuffix(today.plusDays(1), today))
+        val zh = java.util.Locale.CHINESE
+        assertEquals("今天", ShiftclaDate.dateSuffix(today, today, zh))
+        assertEquals("昨天", ShiftclaDate.dateSuffix(today.minusDays(1), today, zh))
+        assertEquals("明天", ShiftclaDate.dateSuffix(today.plusDays(1), today, zh))
         // 10.5 是周一（2026）
-        assertEquals("周一", ShiftclaDate.dateSuffix(LocalDate.of(2026, 10, 5), today))
+        assertEquals("周一", ShiftclaDate.dateSuffix(LocalDate.of(2026, 10, 5), today, zh))
+    }
+
+    @Test
+    fun `日期后缀英文侧走 Today Yesterday 与 Mon 缩写`() {
+        val today = LocalDate.of(2026, 10, 1)
+        val en = java.util.Locale.ENGLISH
+        assertEquals("Today", ShiftclaDate.dateSuffix(today, today, en))
+        assertEquals("Yesterday", ShiftclaDate.dateSuffix(today.minusDays(1), today, en))
+        assertEquals("Tomorrow", ShiftclaDate.dateSuffix(today.plusDays(1), today, en))
+        assertEquals("Mon", ShiftclaDate.dateSuffix(LocalDate.of(2026, 10, 5), today, en))
     }
 
     @Test
     fun `手机端日期文案带今天标记`() {
         val today = LocalDate.of(2026, 10, 1)
-        assertEquals("10月1日 · 今天", ShiftclaDate.currentDateLabel(today, today))
-        assertEquals("10月2日 · 明天", ShiftclaDate.currentDateLabel(today.plusDays(1), today))
+        val zh = java.util.Locale.CHINESE
+        assertEquals("10月1日 · 今天", ShiftclaDate.currentDateLabel(today, today, zh))
+        assertEquals("10月2日 · 明天", ShiftclaDate.currentDateLabel(today.plusDays(1), today, zh))
+    }
+
+    @Test
+    fun `手机端日期文案英文侧是 Oct 1 这种写法`() {
+        val today = LocalDate.of(2026, 10, 1)
+        val en = java.util.Locale.ENGLISH
+        assertEquals("Oct 1 · Today", ShiftclaDate.currentDateLabel(today, today, en))
+        assertEquals("Oct 2 · Tomorrow", ShiftclaDate.currentDateLabel(today.plusDays(1), today, en))
+        // 非中非英也要落到英文，而不是中文 —— 保证德语/法语用户能读
+        assertEquals(
+            "Oct 1 · Today",
+            ShiftclaDate.currentDateLabel(today, today, java.util.Locale.GERMAN),
+        )
     }
 
     // ------------------------------------------------------------ Pager 映射
