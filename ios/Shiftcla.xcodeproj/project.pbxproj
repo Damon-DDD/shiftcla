@@ -1,0 +1,293 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4ED336E0C61602B813598C74F7A2E164 /* ApiKeySheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E488E824F18193AEFECCCA1EA3D242F8 /* ApiKeySheet.swift */; };
+		F3F293B60C0801357AAD7E2AFF1DDAE0 /* ApiKeyStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5387ADF8DB61BF485581377E4F4586D /* ApiKeyStore.swift */; };
+		CD1184AB407F5718695A6E315D0666B0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F381B2210227D5D6178A0EA8ECFE91E /* ContentView.swift */; };
+		46E2DE74F237FB27A84EBC59CCA39629 /* CourseCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964287D22258B0586767099EF6D77EDC /* CourseCard.swift */; };
+		2305D5B51B2734B8DF25E74B3D43017D /* DeepSeekEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6052E76264D28D3DB8AC8D6561CB653D /* DeepSeekEngine.swift */; };
+		A1A5E92F1C21A3A119F8391ACF8AD4FF /* ImportSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B17B51B8156F6C5087A2DA157ADFE0B /* ImportSheet.swift */; };
+		07D87205361857B86756D031243A17D2 /* LiquidGlass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D94915963A2CACADBC836DC2C3881B /* LiquidGlass.swift */; };
+		44B27737F494E7433D6555694E6426EB /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAEAEDE36D9D276201B9A29A10F2C408 /* Models.swift */; };
+		917DBF94624D72499470DE35010435AE /* ShiftclaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72CD714EE1C2C11118BC1C408831EEA2 /* ShiftclaApp.swift */; };
+		DC02022BD21DFAE02E724CE2D509A6AA /* ShiftclaDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7738C35F9BD1A4659083671F2644A10A /* ShiftclaDate.swift */; };
+		B90B9733D678D7B6181A93CC43A18684 /* ShiftclaTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = E955D7B1322A73C610B9D723738E1989 /* ShiftclaTheme.swift */; };
+		DC3234E0814970D1AE59D35408BA0637 /* ShiftclaViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C11B5D8F28A1ED3539B36A7AB073967 /* ShiftclaViewModel.swift */; };
+		7545DB1D159EB7183E6B34C22766AD94 /* Stores.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D341D818720C4A5DC78C1FD6D9D02D7 /* Stores.swift */; };
+		54CFF1A4226530C69956384729DCC730 /* TermNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952772C1B9A998860AE4071379D197EC /* TermNote.swift */; };
+		5882F837A4C896FA12C3BE7BFCB2BB22 /* ShiftclaCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7ED811B5F3B77896C7B7AF654F2B12 /* ShiftclaCalendarView.swift */; };
+		1842ADFF58C309CD3CAB251F2908C0FE /* CourseDetailOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12DEB618DF2F69B507208247AA52B25 /* CourseDetailOverlay.swift */; };
+		1197DDC8AF91BC0C3C253A0BC6EBD754 /* SideRail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 164ADCE43203792827C2A6FA6FBCDE55 /* SideRail.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		E488E824F18193AEFECCCA1EA3D242F8 /* ApiKeySheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiKeySheet.swift; sourceTree = "<group>"; };
+		E5387ADF8DB61BF485581377E4F4586D /* ApiKeyStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiKeyStore.swift; sourceTree = "<group>"; };
+		6F381B2210227D5D6178A0EA8ECFE91E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		964287D22258B0586767099EF6D77EDC /* CourseCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseCard.swift; sourceTree = "<group>"; };
+		6052E76264D28D3DB8AC8D6561CB653D /* DeepSeekEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepSeekEngine.swift; sourceTree = "<group>"; };
+		3B17B51B8156F6C5087A2DA157ADFE0B /* ImportSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportSheet.swift; sourceTree = "<group>"; };
+		96D94915963A2CACADBC836DC2C3881B /* LiquidGlass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiquidGlass.swift; sourceTree = "<group>"; };
+		CAEAEDE36D9D276201B9A29A10F2C408 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		72CD714EE1C2C11118BC1C408831EEA2 /* ShiftclaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShiftclaApp.swift; sourceTree = "<group>"; };
+		7738C35F9BD1A4659083671F2644A10A /* ShiftclaDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShiftclaDate.swift; sourceTree = "<group>"; };
+		E955D7B1322A73C610B9D723738E1989 /* ShiftclaTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShiftclaTheme.swift; sourceTree = "<group>"; };
+		5C11B5D8F28A1ED3539B36A7AB073967 /* ShiftclaViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShiftclaViewModel.swift; sourceTree = "<group>"; };
+		0D341D818720C4A5DC78C1FD6D9D02D7 /* Stores.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stores.swift; sourceTree = "<group>"; };
+		952772C1B9A998860AE4071379D197EC /* TermNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermNote.swift; sourceTree = "<group>"; };
+		12E5D91215C20E13734EF803DDF0A309 /* Shiftcla.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shiftcla.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C7ED811B5F3B77896C7B7AF654F2B12 /* ShiftclaCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShiftclaCalendarView.swift; sourceTree = "<group>"; };
+		A12DEB618DF2F69B507208247AA52B25 /* CourseDetailOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseDetailOverlay.swift; sourceTree = "<group>"; };
+		164ADCE43203792827C2A6FA6FBCDE55 /* SideRail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideRail.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4FCBC29864E7C7752B7E193F92159AB1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		135B373E788E4C77634C5F25E02827F9 = {
+			isa = PBXGroup;
+			children = (
+				1B5C3207A7CF7F3EC71D77F228BE96E3 /* Shiftcla */,
+				113236722DEE1DC96F378B9DC1BE9CD7 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		1B5C3207A7CF7F3EC71D77F228BE96E3 /* Shiftcla */ = {
+			isa = PBXGroup;
+			children = (
+				E488E824F18193AEFECCCA1EA3D242F8 /* ApiKeySheet.swift */,
+				E5387ADF8DB61BF485581377E4F4586D /* ApiKeyStore.swift */,
+				164ADCE43203792827C2A6FA6FBCDE55 /* SideRail.swift */,
+				A12DEB618DF2F69B507208247AA52B25 /* CourseDetailOverlay.swift */,
+				4C7ED811B5F3B77896C7B7AF654F2B12 /* ShiftclaCalendarView.swift */,
+				6F381B2210227D5D6178A0EA8ECFE91E /* ContentView.swift */,
+				964287D22258B0586767099EF6D77EDC /* CourseCard.swift */,
+				6052E76264D28D3DB8AC8D6561CB653D /* DeepSeekEngine.swift */,
+				3B17B51B8156F6C5087A2DA157ADFE0B /* ImportSheet.swift */,
+				96D94915963A2CACADBC836DC2C3881B /* LiquidGlass.swift */,
+				CAEAEDE36D9D276201B9A29A10F2C408 /* Models.swift */,
+				72CD714EE1C2C11118BC1C408831EEA2 /* ShiftclaApp.swift */,
+				7738C35F9BD1A4659083671F2644A10A /* ShiftclaDate.swift */,
+				E955D7B1322A73C610B9D723738E1989 /* ShiftclaTheme.swift */,
+				5C11B5D8F28A1ED3539B36A7AB073967 /* ShiftclaViewModel.swift */,
+				0D341D818720C4A5DC78C1FD6D9D02D7 /* Stores.swift */,
+				952772C1B9A998860AE4071379D197EC /* TermNote.swift */,
+			);
+			path = Shiftcla;
+			sourceTree = "<group>";
+		};
+		113236722DEE1DC96F378B9DC1BE9CD7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				12E5D91215C20E13734EF803DDF0A309 /* Shiftcla.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		36A1A1F9379155C629B1A4712518C2F8 /* Shiftcla */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5D7CF4D6E17A5B96DECF65AF953E1FD3 /* Build configuration list for PBXNativeTarget "Shiftcla" */;
+			buildPhases = (
+				C197A1D4E0DE673615AC32CBB59C194B /* Sources */,
+				4FCBC29864E7C7752B7E193F92159AB1 /* Frameworks */,
+				8A6A452CEE30B0908A47D41D78BEF56C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Shiftcla;
+			productName = Shiftcla;
+			productReference = 12E5D91215C20E13734EF803DDF0A309 /* Shiftcla.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		246644EA9CE14F82F472393CCFC2EC43 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2710;
+				LastUpgradeCheck = 2710;
+				TargetAttributes = {
+					36A1A1F9379155C629B1A4712518C2F8 = {
+						CreatedOnToolsVersion = 27.1;
+					};
+				};
+			};
+			buildConfigurationList = 2797260E8B7E9AE1CCD97FB5BBC87C71 /* Build configuration list for PBXProject "Shiftcla" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 135B373E788E4C77634C5F25E02827F9;
+			productRefGroup = 113236722DEE1DC96F378B9DC1BE9CD7 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				36A1A1F9379155C629B1A4712518C2F8 /* Shiftcla */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8A6A452CEE30B0908A47D41D78BEF56C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C197A1D4E0DE673615AC32CBB59C194B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4ED336E0C61602B813598C74F7A2E164 /* ApiKeySheet.swift in Sources */,
+				F3F293B60C0801357AAD7E2AFF1DDAE0 /* ApiKeyStore.swift in Sources */,
+				1197DDC8AF91BC0C3C253A0BC6EBD754 /* SideRail.swift in Sources */,
+				1842ADFF58C309CD3CAB251F2908C0FE /* CourseDetailOverlay.swift in Sources */,
+				5882F837A4C896FA12C3BE7BFCB2BB22 /* ShiftclaCalendarView.swift in Sources */,
+				CD1184AB407F5718695A6E315D0666B0 /* ContentView.swift in Sources */,
+				46E2DE74F237FB27A84EBC59CCA39629 /* CourseCard.swift in Sources */,
+				2305D5B51B2734B8DF25E74B3D43017D /* DeepSeekEngine.swift in Sources */,
+				A1A5E92F1C21A3A119F8391ACF8AD4FF /* ImportSheet.swift in Sources */,
+				07D87205361857B86756D031243A17D2 /* LiquidGlass.swift in Sources */,
+				44B27737F494E7433D6555694E6426EB /* Models.swift in Sources */,
+				917DBF94624D72499470DE35010435AE /* ShiftclaApp.swift in Sources */,
+				DC02022BD21DFAE02E724CE2D509A6AA /* ShiftclaDate.swift in Sources */,
+				B90B9733D678D7B6181A93CC43A18684 /* ShiftclaTheme.swift in Sources */,
+				DC3234E0814970D1AE59D35408BA0637 /* ShiftclaViewModel.swift in Sources */,
+				7545DB1D159EB7183E6B34C22766AD94 /* Stores.swift in Sources */,
+				54CFF1A4226530C69956384729DCC730 /* TermNote.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		BDEF43260C97D79CAB4BBE5C758A2421 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		137F8E3F42768A1718D7437B8B5E7FC6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		87D2005371B60F592170B32B40097AEB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shiftcla.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				OTHER_SWIFT_FLAGS = "$(inherited) -disable-sandbox";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		3173BAEEEA32EE8EB7B5D07C11786CDF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shiftcla.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				OTHER_SWIFT_FLAGS = "$(inherited) -disable-sandbox";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2797260E8B7E9AE1CCD97FB5BBC87C71 /* Build configuration list for PBXProject "Shiftcla" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BDEF43260C97D79CAB4BBE5C758A2421 /* Debug */,
+				137F8E3F42768A1718D7437B8B5E7FC6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5D7CF4D6E17A5B96DECF65AF953E1FD3 /* Build configuration list for PBXNativeTarget "Shiftcla" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				87D2005371B60F592170B32B40097AEB /* Debug */,
+				3173BAEEEA32EE8EB7B5D07C11786CDF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 246644EA9CE14F82F472393CCFC2EC43 /* Project object */;
+}

@@ -23,6 +23,20 @@ Jetpack Compose + Material 3 写的原生 Android 应用，手机 / 折叠屏 / 
 
 ---
 
+## iOS 版
+
+源码在 [`ios/`](ios/)，SwiftUI 重写，与 Android 版功能对齐。
+
+- 最低 iOS 17（液态玻璃在 iOS 26+ 启用，旧系统回退毛玻璃）
+- **中英双语**：跟随系统语言，非中文系统显示英文
+- 手机 / 折叠屏（iPhone Duo）/ 平板自适应
+
+```bash
+open ios/Shiftcla.xcodeproj      # Xcode 打开后 ⌘R 即可运行
+```
+
+> 目前处于测试阶段，尚未上架 App Store；自行签名后可装到真机。
+
 ## 它解决什么问题
 
 教务系统导出的课表基本没法看：一坨纯文本、周次藏在括号里、单双周写在小字里、换个学期还得重新对。

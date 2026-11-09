@@ -33,3 +33,12 @@ local.properties
 *.jks
 *.keystore
 keystore.properties
+
+# ---- iOS / Xcode ----
+ios/**/xcuserdata/
+ios/**/*.xcuserstate
+ios/**/DerivedData/
+ios/**/build/
+*.ipa
+*.dSYM
+.DS_Store
